@@ -51,6 +51,18 @@ export const Ticket = () => {
         ).then(fetchTicket)
     }
 
+    const updateTicketDate = (evt) => {
+        const updatedTicket = {...ticket, date_completed: new Date().toISOString()}
+
+        fetchIt(
+            `http://localhost:8000/tickets/${ticketId}`,
+            {
+                method: "PUT",
+                body: JSON.stringify(updatedTicket)
+            }
+        ).then(fetchTicket)
+    }
+
     const ticketStatus = () => {
         if (ticket.date_completed === null) {
             if (ticket.employee) {
@@ -71,7 +83,7 @@ export const Ticket = () => {
                     {
                         employees.map(e => <option key={`employee--${e.id}`} value={e.id}>{e.full_name}</option>)
                     }
-                </select>
+                </select><button onClick={updateTicketDate}>Mark Done</button>
             </div>
         }
         else {
@@ -86,6 +98,7 @@ export const Ticket = () => {
                 <div>{ticket.description}</div>
 
                 <footer className="ticket__footer ticket__footer--detail">
+                
                     <div className=" footerItem">Submitted by {ticket.customer?.full_name}</div>
                     <div className="ticket__employee footerItem">
                         {
@@ -100,7 +113,7 @@ export const Ticket = () => {
                     {
                         isStaff()
                             ? ""
-                            : <button onClick={deleteTicket}>Delete</button>
+                            :<div> <button onClick={deleteTicket}>Delete</button>  </div>
                     }
                 </footer>
 
